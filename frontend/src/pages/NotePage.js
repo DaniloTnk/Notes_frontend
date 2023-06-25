@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { csrftoken } from '../components/csrfToken'
 
 const NotePage = ({ match }) => {
 
@@ -16,11 +17,24 @@ const NotePage = ({ match }) => {
     console.log("DATA:",{data})
     setNote(data)
   }
+
+  let updateNote = async () => {
+    let response = await fetch(`/api/notes/${id}/`, {
+      method: "PUT",
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify(note)
+    })
+    
+  }
     
   return (
     <div>
-      <h1>{note?.title}</h1>
-      <h3>{note?.content}</h3>
+      <textarea onChange={(e) => { setNote({...note, 'title': e.target.value})}} defaultValue={note?.title}></textarea>
+      <textarea onChange={(e) => { setNote({...note, 'title': e.target.value})}} defaultValue={note?.content}></textarea>
+      <button onClick={updateNote}>Save</button>
     </div>
   )
 }
