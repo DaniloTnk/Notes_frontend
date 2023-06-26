@@ -12,6 +12,7 @@ const NotePage = ({ match, history }) => {
   }, [id])
 
   let getNote = async () => {
+    if (id === 'new') return
     let response = await fetch(`/api/notes/${id}/`)
     let data = await response.json()
     console.log("DATA:",{data})
@@ -42,13 +43,31 @@ const NotePage = ({ match, history }) => {
     })
     navigate('/')
   }
+
+  let createNote = async () => {
+    let response = await fetch(`/api/notes/`, {
+      method: "POST",
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify(note)
+    })
+    navigate('/')
+  }
     
   return (
     <div>
-      <textarea onChange={(e) => { setNote({...note, 'title': e.target.value})}} defaultValue={note?.title}></textarea>
-      <textarea onChange={(e) => { setNote({...note, 'title': e.target.value})}} defaultValue={note?.content}></textarea>
-      <button onClick={updateNote}>Save</button>
-      <button onClick={deleteNote}>Delete</button>
+      <textarea onChange={(e) => { setNote({...note, 'title': e.target.value})}} value={note?.title}></textarea>
+      <textarea onChange={(e) => { setNote({...note, 'content': e.target.value})}} value={note?.content}></textarea>
+      { id !== 'new' ? (
+        <div>
+          <button onClick={deleteNote}>Delete</button>
+          <button onClick={updateNote}>Save</button>
+        </div>
+      ): (
+        <button onClick={createNote}>Save</button>
+      )}
     </div>
   )
 } 
