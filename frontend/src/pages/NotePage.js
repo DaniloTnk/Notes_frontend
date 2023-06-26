@@ -57,7 +57,7 @@ const NotePage = ({ match, history }) => {
   }
     
   return (
-    <div>
+    <div className='notes-list-item'>
       <textarea onChange={(e) => { setNote({...note, 'title': e.target.value})}} value={note?.title}></textarea>
       <textarea onChange={(e) => { setNote({...note, 'content': e.target.value})}} value={note?.content}></textarea>
       { id !== 'new' ? (
