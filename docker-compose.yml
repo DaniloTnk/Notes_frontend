@@ -1,0 +1,31 @@
+version: '3.0'
+
+services:
+  backend:
+    build:
+      context: ./Notes_backend/api/
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+
+    volumes:
+      - ./Notes_backend/api/:/app/backend
+    networks:
+      - docker-notes-network
+
+  frontend:
+    build:
+      context: ./Notes_frontend/
+      dockerfile: Dockerfile
+    
+    ports:
+      - '3000:3000'
+
+    volumes:
+      - ./Notes_frontend/frontend:/app/frontend
+    networks:
+      - docker-notes-network
+
+networks:
+  docker-notes-network:
+    driver: bridge
